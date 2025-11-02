@@ -1,7 +1,10 @@
-@import "@css/imports.css";
+@import "./imports.css";
+
 :root {
+  --background-color: #e0e0e0;
+  --text-color: #000000;
   --border-radius: 5px;
-  --header: max-content
+  --header: max-content;
 }
 
 body {
@@ -13,7 +16,8 @@ body {
   display: grid;
   grid-template-areas:
     "header header"
-    "nav main";
+    "nav main"
+    "nav footer";
   grid-template-rows: auto 1fr;
   grid-template-columns: auto 1fr;
   gap: 5px;
@@ -50,6 +54,17 @@ main {
   padding: 0 5px 2px 5px;
   border-radius: var(--border-radius);
   height: 100%;
+}
+
+footer {
+  grid-area: footer;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--gray-4);
+  border-radius: var(--border-radius);
+  height: 36px;
+  font-size: .9rem;
+  text-align: center;
 }
 
 @media (max-width: 700px) {

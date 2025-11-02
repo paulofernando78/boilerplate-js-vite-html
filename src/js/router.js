@@ -1,30 +1,28 @@
-// 👇 Define all available routes in your SPA
-// If the user navigates to a path not listed here, it will fall back to "wc-404"
 const routes = {
-  404: "wc-404", // Fallback component for invalid routes
-  "/": "wc-home",
-  "/about": "wc-about",
-  "/contact": "wc-contact",
+  404: "/pages/404.hmtl",
+  "/": "/pages/home.html",
+  "/about": "/pages/about.html",
+  "/contact": "/pages/contact.html",
 };
 
-// 👇 Used for navigation without page reload
 export function navigateTo(path) {
-  // Updates the browser's URL (History API)
   window.history.pushState({}, "", path);
   renderRoute();
 }
 
-// 👇 Decides which component to render based on the current URL
-export function renderRoute() {
-  const app = document.querySelector("#app"); // Main container
-  const path = window.location.pathname; // Current route path
+export async function renderRoute() {
+  const app = document.querySelector("#app");
+  const path = window.location.pathname;
+  const route = routes[path] || routes["404"];
 
-  // If path doesn't exist in routes, use wc-404 as fallback
-  const tagName = routes[path] || "wc-404";
-
-  // Injects the selected Web Component into the DOM
-  app.innerHTML = `<${tagName}></${tagName}>`;
+  try {
+    const response = await fetch(route);
+    if (!response.ok) throw new Error("Page not found");
+    const html = await response.text();
+    app.innerHTML = html;
+  } catch (err) {
+    app.innerHTML = `<h1>404 - Page Not Found</h1>`
+  }
 }
 
-// 👇 Handles browser navigation (Back/Forward buttons)
 window.addEventListener("popstate", renderRoute);
